@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play History</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .play-block {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: #4682B4; /* 스틸 블루 배경 */
+            border-radius: 10px; /* 둥근 모서리 */
+        }
+        .play {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: #fff; /* 흰색 배경 */
+            border-radius: 10px; /* 둥근 모서리 */
+        }
+        .date, .player, .result {
+            color: #ffc107; /* 노란색 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Play History</h1>
+        <div class="play-block">
+            {% for play in history %}
+                <div class="play">
+                    <p>
+                        <span class="date">{{ play.date }}</span> -
+                        <span class="player">{{ play.player }}</span> -
+                        <span class="result">{{ play.result }}</span>
+                    </p>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>
