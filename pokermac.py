@@ -5,6 +5,7 @@ import sys
 from PIL import Image, ImageTk
 import pygame
 import datetime
+import redis
 import main
 class card:
     def __init__(self):
@@ -265,6 +266,17 @@ def clear_text():
     canvas.delete("winner")
     canvas.delete("cards")
 
+def register_text():
+    global register_id, register_pd
+    register_id = register_id_entry.get()
+    register_pd = register_pd_entry.get()
+
+    register_excess(register_id,register_pd)
+def register_excess(a,b):
+    global r
+    r.set(a,a)
+    r.set(b,b)
+    messagebox.showinfo("Poker Game","회원가입 완료!")
 
 def login_text():
     global id,passwd
@@ -273,7 +285,7 @@ def login_text():
     login_excess()
 
 def login_excess():
-    if id=="python" and passwd=="good":
+    if r.exists(id)==1 and r.exists(passwd)==1:
         start.deiconify()
         login.withdraw()
     else:
@@ -312,6 +324,8 @@ def ranking_back():
 def ranking_delete():
     rank_text.delete('1.0', END)
 
+r = redis.Redis("localhost")
+
 start=Tk()
 start.geometry("1024x760")
 start.title("Poker Game")
@@ -343,8 +357,9 @@ login_canvas=Canvas(login, width=300,height=300)
 login_canvas.pack()
 login_canvas.create_image(0,0, anchor=NW, image=login_image)
 login_canvas.create_text(65, 85, text="ID", fill="white", font=("Helvetica", 24))
-login_canvas.create_text(115, 155, text="Password", fill="white", font=("Helvetica", 24))
+login_canvas.create_text(105, 155, text="Password", fill="white", font=("Helvetica", 24))
 #login.withdraw()
+
 
 login_entry = Entry(login)
 login_entry.place(x=50,y=100)
@@ -352,6 +367,32 @@ login_entry.place(x=50,y=100)
 passwd_entry = Entry(login)
 passwd_entry.place(x=50,y=170)
 
+register=Toplevel()
+register.geometry("400x400")
+register.title("Register")
+register_canvas=Canvas(register, width=400,height=400)
+register_canvas.pack()
+register_canvas.create_image(0,0, anchor=NW, image=login_image)
+#register.withdraw()
+
+register_id_entry = Entry(register)
+register_id_entry.place(x=50,y=100)
+
+register_pd_entry = Entry(register)
+register_pd_entry.place(x=50,y=170)
+register_canvas.create_text(65, 85, text="ID", fill="white", font=("Helvetica", 24))
+register_canvas.create_text(105, 155, text="Password", fill="white", font=("Helvetica", 24))
+
+
+register_button=Button(register)
+register_button.config(width=5,height=1)
+register_button.config(text="회원가입")
+register_button.config(command=register_text)
+register_button.config(bd=3)
+register_button.config(bg="white")
+register_button.config(font=("Helvetica", 12, "bold"))
+register_button.pack()
+button_register=register_canvas.create_window(220,220,anchor=NW, window=register_button)
 #랭킹창
 ranking=Toplevel()
 ranking.geometry("1024x670")
