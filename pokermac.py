@@ -267,29 +267,37 @@ def clear_text():
     canvas.delete("cards")
 
 def register_text():
-    global register_id, register_pd
+    global register_id, register_pd , register_name
     register_id = register_id_entry.get()
     register_pd = register_pd_entry.get()
+    register_name = register_name_entry.get()
 
-    register_excess(register_id,register_pd)
-def register_excess(a,b):
+    register_excess(register_id,register_pd,register_name)
+def register_excess(a,b,c):
     global r
-    r.set(a,a)
-    r.set(b,b)
+    r.rpush(c,a)
+    r.rpush(c,b)
+    #r.set(a,a)
+    #r.set(b,b)
     messagebox.showinfo("Poker Game","회원가입 완료!")
 
 def login_text():
-    global id,passwd
+    global id,passwd,name
     id = login_entry.get()
     passwd = passwd_entry.get()
-    login_excess()
+    name = name_entry.get()
+    login_excess(id,passwd,name)
 
-def login_excess():
-    if r.exists(id)==1 and r.exists(passwd)==1:
+def login_excess(a,b,c):
+    values = r.lrange(c,0,1)
+    string_values = [value.decode('utf-8') for value in values]
+    print(string_values[0])
+    print(string_values[1])
+    if string_values[0]==a and string_values[1]==b:
         start.deiconify()
         login.withdraw()
     else:
-        messagebox.showinfo("Login Denied", f"로그인실패! 아이디:python 비밀번호:good 입력!")
+        messagebox.showinfo("Login Denied", f"로그인실패! 이름, 아이디, 비밀번호 확인!")
 
 def mute():
     global volume, origin_volume
@@ -358,8 +366,11 @@ login_canvas.pack()
 login_canvas.create_image(0,0, anchor=NW, image=login_image)
 login_canvas.create_text(65, 85, text="ID", fill="white", font=("Helvetica", 24))
 login_canvas.create_text(105, 155, text="Password", fill="white", font=("Helvetica", 24))
+login_canvas.create_text(80, 25, text="Name", fill="white", font=("Helvetica", 24))
 #login.withdraw()
 
+name_entry = Entry(login)
+name_entry.place(x=50,y=40)
 
 login_entry = Entry(login)
 login_entry.place(x=50,y=100)
@@ -380,9 +391,14 @@ register_id_entry.place(x=50,y=100)
 
 register_pd_entry = Entry(register)
 register_pd_entry.place(x=50,y=170)
+
+register_name_entry = Entry(register)
+register_name_entry.config(width=10)
+register_name_entry.place(x=50,y=30)
+
 register_canvas.create_text(65, 85, text="ID", fill="white", font=("Helvetica", 24))
 register_canvas.create_text(105, 155, text="Password", fill="white", font=("Helvetica", 24))
-
+register_canvas.create_text(81, 18, text="Name", fill="white", font=("Helvetica", 24))
 
 register_button=Button(register)
 register_button.config(width=5,height=1)
