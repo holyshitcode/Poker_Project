@@ -280,6 +280,8 @@ def register_excess(a,b,c):
     #r.set(a,a)
     #r.set(b,b)
     messagebox.showinfo("Poker Game","회원가입 완료!")
+    register.withdraw()
+    login.deiconify()
 
 def login_text():
     global id,passwd,name
@@ -331,6 +333,10 @@ def ranking_back():
 
 def ranking_delete():
     rank_text.delete('1.0', END)
+
+def register_show():
+    login.withdraw()
+    register.deiconify()
 
 r = redis.Redis("localhost")
 
@@ -384,7 +390,15 @@ register.title("Register")
 register_canvas=Canvas(register, width=400,height=400)
 register_canvas.pack()
 register_canvas.create_image(0,0, anchor=NW, image=login_image)
-#register.withdraw()
+register.withdraw()
+
+registerGO_btn=Button(login)
+registerGO_btn.config(width=5,height=1,text="회원가입")
+registerGO_btn.config(command=register_show)
+registerGO_btn.config(bd=3,bg="white",font=("Helvetica",12,"bold"))
+registerGO_btn.pack()
+button_register_go=login_canvas.create_window(150,220,anchor=NW,window=registerGO_btn)
+
 
 register_id_entry = Entry(register)
 register_id_entry.place(x=50,y=100)
@@ -425,7 +439,14 @@ login_button.config(bg="white")
 login_button.config(font=("Helvetica", 12, "bold"))
 login_button.pack()
 button_login=login_canvas.create_window(220,220,anchor=NW, window=login_button)
-
+"""
+registerGO_btn=Button(login)
+registerGO_btn.config(width=5,height=1,text="회원가입")
+registerGO_btn.config(command=register_show())
+registerGO_btn.config(bd=3,bg="white",font=("Helvetica",12,"bold"))
+#registerGO_btn.pack()
+button_register_go=login_canvas.create_window(160,220,anchor=NW,window=registerGO_btn)
+"""
 
 play_image = ImageTk.PhotoImage(image)
 canvas.create_image(0,0,anchor=NW, image=play_image,tags="background")
