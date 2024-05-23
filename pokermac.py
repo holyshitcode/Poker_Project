@@ -624,7 +624,7 @@ rank_text=Text(ranking,width=35, height=20)
 rank_text.pack()
 
 rank_go=Button(started,text="rank",command=ranking_go,width=5,height=1)
-rank_go.place(x=500,y=100)
+rank_go.place(x=800,y=5)
 
 rank_back=Button(ranking,text="back",command=ranking_back,width=5,height=1)
 rank_back.pack()
